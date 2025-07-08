@@ -1,0 +1,42 @@
+# config/analysis_config.yaml
+
+# Temporal analysis settings
+temporal:
+  days_of_week:
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    - Sunday
+
+  colors:
+    Monday: red
+    Tuesday: green
+    Wednesday: blue
+    Thursday: magenta
+    Friday: cyan
+    Saturday: yellow
+    Sunday: pink
+
+# Clustering analysis settings
+clustering:
+  sample_sizes:
+    - 20000
+    - 40000
+    - 100000
+
+  min_samples:
+    - 25
+    - 50
+    - 75
+    - 100
+    - 125
+
+  eps: 0.01
+
+# Data settings
+data:
+  input_path: "processed_data/combined_data_with_features.csv"
+  output_path: "results/"
