@@ -11,12 +11,14 @@ from typing import Dict
 from rich.progress import Progress
 
 def find_number_of_clusters(coords) -> Dict[int, pd.DataFrame]:
-    clustering_results = {} # key = sample_size, value indexed by min_sample with clustering info as entries 
+    clustering_results = {} # key = sample_size, value indexed by min_sample with clustering info as entries
+    #min_Sample means you need to have at least min_Sample points in a cluster to be considered a cluster
     
     with Progress() as progress:
         size_task = progress.add_task("Sample sizes", total=len(analysis_config.sample_sizes))
         min_task = progress.add_task("min_samples", total=len(analysis_config.min_samples))
         print(f"ε parameter set to {analysis_config.eps}")
+        
         for sample_size in analysis_config.sample_sizes:
             progress.reset(min_task)
             
