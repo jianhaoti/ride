@@ -13,7 +13,6 @@ env/
 venv/
 .venv/
 
-
 # Data files (large files)
 raw_data/*.csv.zip
 processed_data/*.csv
@@ -35,4 +34,4 @@ Thumbs.db
 
 # Logs
 *.log
-EOF
+EOFprocessed_data/uber/combined_data.csv
