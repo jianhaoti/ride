@@ -1,27 +1,26 @@
 import pandas as pd
+from config import data_paths_config as dp
+from pathlib import Path
 
-def obtain_weather_columns(weather_df: pd.DataFrame, output_path: str):
+def obtain_weather_columns(weather_df: pd.DataFrame):
     weather_columns = weather_df.columns
-    
-    with open(f'{output_path}', 'w') as f:
+    file_name = "weather_columns.txt"
+    output_file = Path(dp.weather_processed_path) / file_name
+    output_file.parent.mkdir(exist_ok=True, parents=True)
+
+    with open(output_file, 'w') as f:
         for col in weather_columns:
-            f.write(col)
+            f.write(col + '\n')
 
 
-def filter_out_weather_column_metadata(weather_columns_input_path: str, output_path: str):
-    delete_these_phrases = ["Measurement_Code", "Quality_Code", "Report_Type", "Source_Code", "Source_Station_ID"]
-    lines = []
-    filtered_lines = []
-
-    with open(f'{weather_columns_input_path}', 'r') as f:
-        for line in f:
-            lines.append(line)
-    
-    for line in lines:
-        if not any(phrase in line for phrase in delete_these_phrases):
-            filtered_lines.append(line)
-        
-    
-    with open(f'{output_path}', 'w') as f:
-        for line in filtered_lines:
-            f.write(line)
+def filter_out_weather_column_metadata(
+    weather_columns_input_path=Path(dp.weather_processed_path) / "weather_columns.txt"
+):
+    delete_these_phrases = [
+        "Measurement_Code", "Quality_Code", "Report_Type", "Source_Code", "Source_Station_ID"
+    ]
+    output_file = Path(dp.weather_processed_path) / "filtered_weather_columns.txt"
+    with open(weather_columns_input_path, 'r') as infile, open(output_file, 'w') as outfile:
+        for line in infile:
+            if not any(phrase in line for phrase in delete_these_phrases):
+                outfile.write(line)

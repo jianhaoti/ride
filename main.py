@@ -35,10 +35,10 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 if __name__ == "__main__":
-    csv_path = Path(f"{dp.uber_processed_csv}")
+    # csv_path = Path(f"{dp.uber_processed_csv}")
 
-    combined_data_df = process_uber_data() if not csv_path.exists() else pd.read_csv(csv_path, parse_dates=['Date/Time'])
-    combined_data_df = add_features(combined_data_df)
+    # combined_data_df = process_uber_data() if not csv_path.exists() else pd.read_csv(csv_path, parse_dates=['Date/Time'])
+    # combined_data_df = add_features(combined_data_df)
 
     # # Spatial 
     # coords = data_pipeline.get_spatial_data()
@@ -53,17 +53,16 @@ if __name__ == "__main__":
     # run_spatial_analysis(coords)
 
     # Temporal 
-    temporal = data_pipeline.get_temporal_data()
+    # temporal = data_pipeline.get_temporal_data()
     # earliest_date = temporal['Date/Time'].min()
     # latest_date = temporal['Date/Time'].max()
     # console.log(f"Earliest date is {earliest_date} and latest date is {latest_date}.")
 
-    display_temporal_analysis()
+    # display_temporal_analysis()
 
 
     # Weather
-    # weather_csv = data_pipeline.get_weather_data()
-    # obtain_weather_columns(weather_csv, output_path=)
+    weather_csv = data_pipeline.get_weather_data()
+    obtain_weather_columns(weather_csv)
 
-    # print(weather_columns)
-    # filter_out_weather_column_metadata()
+    filter_out_weather_column_metadata()
