@@ -1,10 +1,11 @@
 import pandas as pd 
-from config import analysis_config
+from config import analysis_config as anal
 from typing import Dict, Tuple
 from data import data_pipeline
+from pathlib import Path
 
 # Get days of week from config
-days_of_week = analysis_config.days_of_week
+days_of_week = anal.days_of_week
 
 def generate_ride_density_per_hour(df: pd.DataFrame) -> pd.Series:
     df['Hour'] = df['Date/Time'].dt.hour
@@ -17,18 +18,18 @@ def generate_ride_density_per_hour(df: pd.DataFrame) -> pd.Series:
 def generate_ride_density_per_day(df: pd.DataFrame) -> pd.Series:
     unique_day_series = pd.Series(
         (df[df['Day Name'] == day]['Date/Time'].dt.date.nunique() for day in days_of_week), #type:ignore
-        index=analysis_config.days_of_week
+        index=anal.days_of_week
     )    
-    df_aggregate_rides = df.groupby('Day Name').size().reindex(analysis_config.days_of_week, fill_value=0)
+    df_aggregate_rides = df.groupby('Day Name').size().reindex(anal.days_of_week, fill_value=0)
     density = df_aggregate_rides / unique_day_series
 
     return density
 
 def get_per_hour_dict(df: pd.DataFrame) -> Dict[str, Tuple[pd.Series, str]]:
     ret = {}
-    for day in analysis_config.days_of_week:
+    for day in anal.days_of_week:
         df_filtered_by_day = df[df['Day Name'] == day].copy()
-        ret[day] = (generate_ride_density_per_hour(df_filtered_by_day), analysis_config.colors[day]) #type:ignore
+        ret[day] = (generate_ride_density_per_hour(df_filtered_by_day), anal.colors[day]) #type:ignore
     
     return ret
 
@@ -37,8 +38,8 @@ def get_per_day_dict(df: pd.DataFrame) -> Dict[str, Tuple[pd.Series, str]]:
     day_density_series = generate_ride_density_per_day(df)
 
     ret = {}
-    for day in analysis_config.days_of_week:
-        ret[day] = (day_density_series[day], analysis_config.colors[day])
+    for day in anal.days_of_week:
+        ret[day] = (day_density_series[day], anal.colors[day])
     return ret
 
 def get_weekday_weekend_per_hour_dict(df: pd.DataFrame) -> Dict[str, Tuple[pd.Series, str]]:
@@ -168,6 +169,8 @@ def calculate_temporal_statistics(df: pd.DataFrame) -> Dict:
     return stats
 
 def run_temporal_analysis():
+    Path(anal.output_path_temporal).mkdir(parents = True, exist_ok = True)
+
     date_time = data_pipeline.get_temporal_data()
     
     # Calculate comprehensive statistics
