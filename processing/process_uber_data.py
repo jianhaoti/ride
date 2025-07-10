@@ -2,7 +2,7 @@ import pandas as pd
 import zipfile
 import glob
 from pathlib import Path
-from config import data_paths_config
+from config import data_paths_config as dp
 
 def process_uber_data() -> pd.DataFrame:
     """
@@ -17,7 +17,7 @@ def process_uber_data() -> pd.DataFrame:
     all_dataframes = []
 
     # get all the zipped files in the raw_data directory into the list all_dataframes
-    files_to_unzip = [f for f in glob.glob(f"{data_paths_config.uber_raw_path}/*.zip") if "15" not in f]
+    files_to_unzip = [f for f in glob.glob(f"{dp.uber_raw_path}/*.zip") if "15" not in f]
    
 
     for file in files_to_unzip:
@@ -29,7 +29,7 @@ def process_uber_data() -> pd.DataFrame:
     # concatenate into one big dataframe
     combined_df = pd.concat(all_dataframes)
     combined_df['Date/Time'] = pd.to_datetime(combined_df['Date/Time'])
-    combined_df.to_csv(data_paths_config.uber_processed_csv, index=False)
+    combined_df.to_csv(dp.uber_processed_csv, index=False)
     
 
     # calculate % of duplicates and drop them
