@@ -13,11 +13,10 @@ env/
 venv/
 .venv/
 
-# Data files (large files)
-raw_data/*.csv.zip
-processed_data/*.csv
-results/*.csv
-results/*.json
+# Data sets
+raw_data/
+processed_data/
+results/
 
 # IDE
 .vscode/
