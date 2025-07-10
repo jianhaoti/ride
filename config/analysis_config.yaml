@@ -36,7 +36,5 @@ clustering:
 
   eps: 0.01
 
-# Data settings
-data:
-  input_path: "processed_data/combined_data_with_features.csv"
-  output_path: "results/"
+output_path_dbscan: "results/analysis/dbscan"
+output_path_temporal: "results/analysis/temporal"

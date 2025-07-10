@@ -1,13 +1,13 @@
-from rich.console import Console
-from rich.table import Table
 from typing import Dict
 import pandas as pd
-
 import matplotlib.pyplot as plt
 
-from config import analysis_config
-
+from config import analysis_config as anal
 from analysis.temporal_analysis import run_temporal_analysis
+
+
+from rich.console import Console
+from rich.table import Table
 
 def plot_scatterplot(coords):
     """Plot scatter plot of coordinates (handles both DataFrame and numpy array)"""
@@ -26,34 +26,34 @@ def plot_scatterplot(coords):
 
 def display_cluster_results_to_console(cluster: Dict[int, pd.DataFrame]):
     console = Console()
-    table = Table(title=f"DBSCAN Cluster Results for ε = {analysis_config.eps}")
+    table = Table(title=f"DBSCAN Cluster Results for ε = {anal.eps}")
 
     # Add columns
     table.add_column("Sample Size", style="cyan")
-    for min_sample in analysis_config.min_samples:
+    for min_sample in anal.min_samples:
         table.add_column(f"ms = {min_sample}", style="green")
 
     # Add rows
-    for i, sample_size in  enumerate(analysis_config.sample_sizes):
+    for i, sample_size in  enumerate(anal.sample_sizes):
         clustering_results = cluster[sample_size]
 
         # number of clusters
         row = [f"{sample_size:,}"]
-        for min_sample in analysis_config.min_samples:
+        for min_sample in anal.min_samples:
             number_of_clusters = clustering_results.loc[min_sample, 'num_clusters']
             row.append(str(number_of_clusters))
         table.add_row(*row)
 
         # percent that the largest cluster takes.
         percent_row = ["largest cluster %"]
-        for min_sample in analysis_config.min_samples:
+        for min_sample in anal.min_samples:
             percent = clustering_results.loc[min_sample, 'percent']
             percent_row.append(str(percent))
         table.add_row(*percent_row)
 
         # Add an empty row for spacing, except last one
-        if i < len(analysis_config.sample_sizes) - 1:
-            table.add_row(*[""] * (len(analysis_config.min_samples) + 1))
+        if i < len(anal.sample_sizes) - 1:
+            table.add_row(*[""] * (len(anal.min_samples) + 1))
     
     console.print(table)
     
@@ -92,30 +92,28 @@ def plot_bar_graph(day_density_dict, title="Avg Rides per Day by Day of Week", s
     plt.show()
 
 
-def display_temporal_analysis():
-    from config import analysis_config
-    
+def display_temporal_analysis():    
     temporal_results = run_temporal_analysis()
     
     # Plot weekday vs weekend patterns
     plot_line_graph(
         temporal_results['weekday_weekend'], 
         title="Weekday vs Weekend Patterns",
-        save_path=f"{analysis_config.output_path}/weekday_weekend_patterns.png"
+        save_path=f"{anal.output_path_temporal}/weekday_weekend_patterns.png"
     )
 
     # Plot daily patterns
     plot_bar_graph(
         temporal_results['every_day'], 
         title="Daily Ride Patterns",
-        save_path=f"{analysis_config.output_path}/daily_patterns.png"
+        save_path=f"{anal.output_path_temporal}/daily_patterns.png"
     )
 
     # Plot hourly patterns by day
     plot_line_graph(
         temporal_results['per_hour'], 
         title="Hourly Patterns by Day",
-        save_path=f"{analysis_config.output_path}/hourly_patterns_by_day.png"
+        save_path=f"{anal.output_path_temporal}/hourly_patterns_by_day.png"
     )
 
 
