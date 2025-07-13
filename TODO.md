@@ -27,7 +27,7 @@ Here's a structured list of suggested features for rideshare demand prediction, 
   - [ ] **Atmospheric Pressure:**
     - [ ] `Sea_Level_Pressure` (hPa or mbar)
 - [ ] **Temporal Features**
-  - [x] `Hour_of_Day` (e.g., 0-23)
+  - [ ] `Hour_of_Day` (e.g., 0-23)
   - [ ] `Day_of_Week` (e.g., Monday=0, Sunday=6)
   - [ ] `Month_of_Year`
   - [ ] `Day_of_Year`
