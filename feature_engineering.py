@@ -106,19 +106,23 @@ def add_is_event_feature(ride_df: pd.DataFrame, event_df: pd.DataFrame) -> pd.Da
     if len(time_filtered_events) == 0:
         print("No events overlap with ride time range")
         return ride_df
+
+        #early exit if no events overlap with time range 
     
     # Process events in batches
     batch_size = 50  # Smaller batch size for better memory management
     total_events = len(time_filtered_events)
+
+    #batch processing to not put all rows in ram  at once 
     
     for i in range(0, total_events, batch_size):
-        end_idx = min(i + batch_size, total_events)
-        event_batch = time_filtered_events.iloc[i:end_idx]
+        end_idx = min(i + batch_size, total_events) #take either end of batch of end of events 
+        event_batch = time_filtered_events.iloc[i:end_idx] #current batch slice 
         
         print(f"Processing events {i+1}-{end_idx} of {total_events}...")
         
         # For each event in the batch, find matching rides
-        for _, event in event_batch.iterrows():
+        for _, event in event_batch.iterrows(): #iterate over the rows
             event_h3 = event['Event H3 Index']
             start_time = event['Start Military Time']
             close_time = event['Close Military Time']
@@ -129,8 +133,11 @@ def add_is_event_feature(ride_df: pd.DataFrame, event_df: pd.DataFrame) -> pd.Da
             
             # Find rides that are within the time window
             time_mask = (ride_df['Date/Time'] >= start_time) & (ride_df['Date/Time'] <= close_time)
+            #this is a boolean series, same lenght as ride_df
+            #Like a temporary column in ride_df where each row is true or fasle 
             
-            if not time_mask.any():
+            if not time_mask.any(): 
+                #if no rides in time window 
                 continue
             
             # For rides in the time window, check spatial proximity
@@ -144,6 +151,9 @@ def add_is_event_feature(ride_df: pd.DataFrame, event_df: pd.DataFrame) -> pd.Da
             # Mark matching rides as events
             matching_indices = time_filtered_rides[spatial_mask].index
             ride_df.loc[matching_indices, 'Is Event'] = True
+
+            #for all rows in ride_df where index is in matching_indices, mark is_event column as true 
+            #this is a vectorized operaiton, much faster than a for loop 
     
     event_count = ride_df['Is Event'].sum()
     print(f"Found {event_count:,} rides near events ({event_count/len(ride_df)*100:.2f}%)")
