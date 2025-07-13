@@ -1,12 +1,11 @@
 import pandas as pd
 from pathlib import Path
 from rich.console import Console
-
-from data.processing.process_uber_data import process_2014_data
+from processing.process_uber_data import process_uber_data
 from feature_engineering import add_is_event_feature
-from feature_engineer_events import process_511_ny_events
+from event_df.feature_engineer_events import process_511_ny_events
 from feature_engineering import add_temporal_features
-from feature_engineer_events import add_h3_index_event
+from event_df.feature_engineer_events import add_h3_index_event
 from feature_engineering import add_h3_9
 
 from analysis.visualization import display_temporal_analysis, plot_hexbin_map, display_cluster_results_to_console
@@ -14,7 +13,6 @@ from analysis.spatial_analysis import find_number_of_clusters
 from data import data_pipeline
 from config import analysis_config
 from analysis.visualization import plot_hexbin_map, plot_heatmap
-
 
 console = Console()
 
@@ -35,11 +33,11 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     df.to_csv("processed_data/combined_data_with_features.csv", index=False)
     return df
 
-if __name__ == "__main__":
+def jasmines_main():
     csv_path = Path("processed_data/combined_data.csv")
     #what does this do?
 
-    combined_data_df = process_2014_data() if not csv_path.exists() else pd.read_csv(csv_path, parse_dates=['Date/Time'])
+    combined_data_df = process_uber_data() if not csv_path.exists() else pd.read_csv(csv_path, parse_dates=['Date/Time'])
     #if csv_path ecists, read it, if not, process the data
     combined_data_df = add_features(combined_data_df)
     combined_data_df = add_h3_9(combined_data_df)
@@ -73,6 +71,9 @@ if __name__ == "__main__":
     
     # Don't run the full dataset yet - let's verify the test works first
     print("\nTest completed. Full dataset processing skipped for now.")
+
+if __name__ == "__main__":
+    jasmines_main()
 
 
 
