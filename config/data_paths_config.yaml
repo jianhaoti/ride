@@ -10,5 +10,4 @@ uber_processed_csv: "processed_data/uber/combined_data.csv"
 # Weather
 weather_raw_psv: "raw_data/weather/GHCNh_USW00094728_2014.psv"
 weather_raw_path: "raw_data/weather"
-
 weather_processed_path: "processed_data/weather"

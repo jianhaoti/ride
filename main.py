@@ -11,7 +11,7 @@ from analysis.spatial_analysis import find_number_of_clusters
 from data import data_pipeline
 from config import analysis_config as anal, data_paths_config as dp
 
-from processing.process_weather_data import filter_out_weather_column_metadata, obtain_weather_columns
+from processing.process_weather_data import filter_out_weather_column_metadata, filter_raw_weather_data, obtain_weather_columns
 
 console = Console()
 
@@ -66,3 +66,4 @@ if __name__ == "__main__":
     obtain_weather_columns(weather_csv)
 
     filter_out_weather_column_metadata()
+    filter_raw_weather_data()
